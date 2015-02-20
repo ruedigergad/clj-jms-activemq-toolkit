@@ -17,4 +17,5 @@
   :global-vars {*warn-on-reflection* true}
   :aot :all
   :java-source-paths ["src-java"]
-  :main clj-jms-activemq-toolkit.main)
+  :main clj-jms-activemq-toolkit.main
+  :plugins [[lein-cloverage "1.0.2"]])
