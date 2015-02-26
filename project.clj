@@ -8,6 +8,7 @@
                  [org.apache.activemq/activemq-broker "5.11.1"]
                  [org.apache.activemq/activemq-client "5.11.1"]
                  [org.apache.activemq/activemq-openwire-legacy "5.11.1"]
+                 [org.slf4j/slf4j-simple "1.7.10"]
                  [clj-assorted-utils "1.8.0"]
                  [cheshire "5.4.0"]]
   :jvm-opts["-Djava.net.preferIPv4Stack=true"]

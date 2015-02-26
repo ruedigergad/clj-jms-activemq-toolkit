@@ -3,7 +3,7 @@
   <groupId>fg-netzwerksicherheit</groupId>
   <artifactId>clj-jms-activemq-toolkit</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.0</version>
+  <version>1.99.0</version>
   <name>clj-jms-activemq-toolkit</name>
   <description>Toolkit for using the ActiveMQ JMS implementation in Clojure.</description>
   <licenses>
@@ -17,7 +17,7 @@
   <scm>
     <connection>scm:git:git://github.com/fg-netzwerksicherheit/clj-jms-activemq-toolkit.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/fg-netzwerksicherheit/clj-jms-activemq-toolkit.git</developerConnection>
-    <tag>76746a4d1944a44684a559c8eb40569a06132b69
+    <tag>814107f94ea2fc4b0f653cbd323fa11ef486ae03
 </tag>
     <url>https://github.com/fg-netzwerksicherheit/clj-jms-activemq-toolkit</url>
   </scm>
@@ -112,22 +112,32 @@
     <dependency>
       <groupId>org.apache.activemq</groupId>
       <artifactId>activemq-broker</artifactId>
-      <version>5.9.0</version>
+      <version>5.11.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.activemq</groupId>
       <artifactId>activemq-client</artifactId>
-      <version>5.9.0</version>
+      <version>5.11.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.activemq</groupId>
       <artifactId>activemq-openwire-legacy</artifactId>
-      <version>5.9.0</version>
+      <version>5.11.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.7.10</version>
     </dependency>
     <dependency>
       <groupId>clj-assorted-utils</groupId>
       <artifactId>clj-assorted-utils</artifactId>
-      <version>1.7.0</version>
+      <version>1.8.0</version>
+    </dependency>
+    <dependency>
+      <groupId>cheshire</groupId>
+      <artifactId>cheshire</artifactId>
+      <version>5.4.0</version>
     </dependency>
     <dependency>
       <groupId>org.clojure</groupId>
