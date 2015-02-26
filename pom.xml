@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>clj-jms-activemq-toolkit</groupId>
+  <groupId>fg-netzwerksicherheit</groupId>
   <artifactId>clj-jms-activemq-toolkit</artifactId>
   <packaging>jar</packaging>
   <version>1.0.0</version>
@@ -15,11 +15,11 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:git:git://github.com//.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com//.git</developerConnection>
-    <tag>1765f786aef787789eb5b6feef29aa99d350b732
+    <connection>scm:git:git://github.com/fg-netzwerksicherheit/clj-jms-activemq-toolkit.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/fg-netzwerksicherheit/clj-jms-activemq-toolkit.git</developerConnection>
+    <tag>76746a4d1944a44684a559c8eb40569a06132b69
 </tag>
-    <url>https://github.com//</url>
+    <url>https://github.com/fg-netzwerksicherheit/clj-jms-activemq-toolkit</url>
   </scm>
   <build>
     <sourceDirectory>src</sourceDirectory>
@@ -64,7 +64,7 @@
   <repositories>
     <repository>
       <id>central</id>
-      <url>http://repo1.maven.org/maven2/</url>
+      <url>https://repo1.maven.org/maven2/</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
@@ -132,7 +132,7 @@
     <dependency>
       <groupId>org.clojure</groupId>
       <artifactId>tools.nrepl</artifactId>
-      <version>0.2.3</version>
+      <version>0.2.6</version>
       <exclusions>
         <exclusion>
           <groupId>org.clojure</groupId>
