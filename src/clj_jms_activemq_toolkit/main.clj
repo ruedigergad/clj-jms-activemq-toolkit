@@ -10,7 +10,8 @@
   ^{:author "Ruediger Gad",
     :doc "Main class to start a simple ActiveMQ broker instance."}
   clj-jms-activemq-toolkit.main
-  (:use clojure.pprint
+  (:use cheshire.core
+        clojure.pprint
         clojure.tools.cli
         clj-jms-activemq-toolkit.jms)
   (:gen-class))
@@ -33,17 +34,19 @@
         (pprint extra-args)
         (let [url (arg-map :url)
               broker-service (start-broker url)
-              broker-info-producer (create-producer url "/topic/broker.info")
+              broker-info-producer (create-producer url "/topic/broker.info.reply")
               broker-info-fn (fn [msg]
-                               (condp (fn [t m] (= (type m) t)) msg
-                                 java.lang.String (condp (fn [v m] (.startsWith m v)) msg
-                                                    "reply" nil ; We ignore all replies for now.
-                                                    "command get-destinations" (let [dst-vector (get-destinations broker-service)
-                                                                             dst-string (str "reply destinations " (clojure.string/join " " dst-vector))]
-                                                                         (broker-info-producer dst-string))
-                                                    (send-error-msg broker-info-producer (str "Unknown broker.info command: " msg)))
-                                 (send-error-msg broker-info-producer (str "Invalid data type for broker.info message: " (type msg)))))
-              broker-info-consumer (create-consumer url "/topic/broker.info" broker-info-fn)
+                               (if (= (type msg) java.lang.String)
+                                 (let [m (parse-string msg)
+                                       cmd (m "cmd")
+                                       args (m "args")]
+                                   (condp = cmd
+                                     "get-destinations" (let [dst-vector (get-destinations broker-service)
+                                                              dst-json (generate-json {"destinations" dst-vector})]
+                                                          (broker-info-producer dst-json))
+                                     (send-error-msg broker-info-producer (str "Invalid broker.info.cmd message: " msg))))
+                                 (send-error-msg broker-info-producer (str "Invalid data type for broker.info.cmd message: " (type msg)))))
+              broker-info-consumer (create-consumer url "/topic/broker.info.cmd" broker-info-fn)
               shutdown-fn (fn []
                             (broker-info-producer :close)
                             (broker-info-consumer :close)

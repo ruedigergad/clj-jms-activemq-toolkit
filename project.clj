@@ -1,4 +1,4 @@
-(defproject clj-jms-activemq-toolkit "1.0.0"
+(defproject clj-jms-activemq-toolkit "1.99.0"
   :description "Toolkit for using the ActiveMQ JMS implementation in Clojure."
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/tools.cli "0.2.4"]
@@ -8,7 +8,8 @@
                  [org.apache.activemq/activemq-broker "5.11.1"]
                  [org.apache.activemq/activemq-client "5.11.1"]
                  [org.apache.activemq/activemq-openwire-legacy "5.11.1"]
-                 [clj-assorted-utils "1.8.0"]]
+                 [clj-assorted-utils "1.8.0"]
+                 [cheshire "5.4.0"]]
   :jvm-opts["-Djava.net.preferIPv4Stack=true"]
   :license {:name "Eclipse Public License (EPL) - v 1.0"
             :url "http://www.eclipse.org/legal/epl-v10.html"
