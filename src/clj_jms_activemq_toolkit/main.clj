@@ -10,7 +10,7 @@
   ^{:author "Ruediger Gad",
     :doc "Main class to start a simple ActiveMQ broker instance."}
   clj-jms-activemq-toolkit.main
-  (:use cheshire.core
+  (:use [cheshire.core :only [generate-string parse-string]]
         clojure.pprint
         clojure.tools.cli
         clj-jms-activemq-toolkit.jms)
@@ -42,7 +42,7 @@
                                        args (m "args")]
                                    (condp = cmd
                                      "get-destinations" (let [dst-vector (get-destinations broker-service)
-                                                              dst-json (generate-json {"destinations" dst-vector})]
+                                                              dst-json (generate-string {"destinations" dst-vector})]
                                                           (broker-info-producer dst-json))
                                      (send-error-msg broker-info-producer (str "Invalid broker.info.cmd message: " msg))))
                                  (send-error-msg broker-info-producer (str "Invalid data type for broker.info.cmd message: " (type msg)))))
