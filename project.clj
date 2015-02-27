@@ -19,6 +19,8 @@
   :global-vars {*warn-on-reflection* true}
   :aot :all
   :java-source-paths ["src-java"]
-  :prep-tasks [["compile" "clj-data-exchange.java-interfaces"] "javac"]
+  :prep-tasks [["compile" "clj-data-exchange.java-interfaces" "clj-jms-activemq-data-exchange.ActiveMqProducer"]
+               ["javac" "src-java/clj_jms_activemq_toolkit/PooledBytesMessageProducer.java"]
+               ["compile" "clj-jms-activemq-data-exchange.ActiveMqDataExchangeController"] "javac"]
   :main clj-jms-activemq-toolkit.main
   :plugins [[lein-cloverage "1.0.2"]])
