@@ -10,7 +10,7 @@
   ^{:author "Ruediger Gad",
     :doc "Data exchange producer via ActiveMQ."} 
   clj-jms-activemq-data-exchange.ActiveMqProducer
+  (:use clj-data-exchange.java-interfaces)
   (:gen-class
    :implements [clj_data_exchange.Producer]))
-
 
