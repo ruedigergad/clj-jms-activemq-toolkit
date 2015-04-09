@@ -8,6 +8,7 @@
                  [org.apache.activemq/activemq-broker "5.11.1"]
                  [org.apache.activemq/activemq-client "5.11.1"]
                  [org.apache.activemq/activemq-openwire-legacy "5.11.1"]
+                 [org.apache.activemq/activemq-stomp "5.11.1"]
                  [org.slf4j/slf4j-simple "1.7.10"]
                  [clj-assorted-utils "1.8.0"]
                  [cheshire "5.4.0"]]
@@ -21,6 +22,6 @@
   :java-source-paths ["src-java"]
   :prep-tasks [["compile" "clj-data-exchange.java-interfaces" "clj-jms-activemq-data-exchange.ActiveMqProducer"]
                ["javac" "src-java/clj_jms_activemq_toolkit/PooledBytesMessageProducer.java"]
-               ["compile" "clj-jms-activemq-data-exchange.ActiveMqDataExchangeController"] "javac"]
+               ["compile" "clj-jms-activemq-data-exchange.ActiveMqDataExchangeController"] "javac" "compile"]
   :main clj-jms-activemq-toolkit.main
   :plugins [[lein-cloverage "1.0.2"]])
