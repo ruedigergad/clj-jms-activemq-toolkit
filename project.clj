@@ -1,4 +1,4 @@
-(defproject fg-netzwerksicherheit/clj-jms-activemq-toolkit "1.99.0"
+(defproject fg-netzwerksicherheit/clj-jms-activemq-toolkit "1.99.1"
   :description "Toolkit for using the ActiveMQ JMS implementation in Clojure."
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/tools.cli "0.2.4"]

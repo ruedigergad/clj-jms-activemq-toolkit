@@ -3,7 +3,7 @@
   <groupId>fg-netzwerksicherheit</groupId>
   <artifactId>clj-jms-activemq-toolkit</artifactId>
   <packaging>jar</packaging>
-  <version>1.99.0</version>
+  <version>1.99.1</version>
   <name>clj-jms-activemq-toolkit</name>
   <description>Toolkit for using the ActiveMQ JMS implementation in Clojure.</description>
   <licenses>
@@ -17,7 +17,7 @@
   <scm>
     <connection>scm:git:git://github.com/fg-netzwerksicherheit/clj-jms-activemq-toolkit.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/fg-netzwerksicherheit/clj-jms-activemq-toolkit.git</developerConnection>
-    <tag>814107f94ea2fc4b0f653cbd323fa11ef486ae03
+    <tag>1f55a5b0aea97f796ead6782eb49a22e512c3d81
 </tag>
     <url>https://github.com/fg-netzwerksicherheit/clj-jms-activemq-toolkit</url>
   </scm>
@@ -123,6 +123,16 @@
       <groupId>org.apache.activemq</groupId>
       <artifactId>activemq-openwire-legacy</artifactId>
       <version>5.11.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.activemq</groupId>
+      <artifactId>activemq-stomp</artifactId>
+      <version>5.11.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.fusesource.stompjms</groupId>
+      <artifactId>stompjms-client</artifactId>
+      <version>1.19</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
