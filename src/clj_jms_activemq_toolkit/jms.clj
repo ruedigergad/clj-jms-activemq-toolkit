@@ -38,17 +38,20 @@
     (.setUseJmx false)
     (.start)))
 
-(defn get-destinations [broker-service]
-  (let [dst-vector (ref [])]
-    (doseq [dst (vec (-> (.getBroker broker-service) (.getDestinationMap) (.values)))]
-      (if (> (-> (.getDestinationStatistics dst) (.getProducers) (.getCount)) 0)
-        (let [dst-type (condp (fn[t d] (= (type d) t)) dst
-                         org.apache.activemq.broker.region.Topic "/topic/"
-                         org.apache.activemq.broker.region.Queue "/queue/"
-                         "/na/")]
-          (dosync
-            (alter dst-vector conj (str dst-type (.getName dst)))))))
-    @dst-vector))
+(defn get-destinations
+  ([broker-service]
+    (get-destinations broker-service true))
+  ([broker-service include-destinations-without-producers]
+    (let [dst-vector (ref [])]
+      (doseq [dst (vec (-> (.getBroker broker-service) (.getDestinationMap) (.values)))]
+        (if (or include-destinations-without-producers (> (-> (.getDestinationStatistics dst) (.getProducers) (.getCount)) 0))
+          (let [dst-type (condp (fn[t d] (= (type d) t)) dst
+                           org.apache.activemq.broker.region.Topic "/topic/"
+                           org.apache.activemq.broker.region.Queue "/queue/"
+                           "/na/")]
+            (dosync
+              (alter dst-vector conj (str dst-type (.getName dst)))))))
+      @dst-vector)))
 
 (defn send-error-msg [producer msg]
   (println msg)
