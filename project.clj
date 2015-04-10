@@ -8,6 +8,8 @@
                  [org.apache.activemq/activemq-broker "5.11.1"]
                  [org.apache.activemq/activemq-client "5.11.1"]
                  [org.apache.activemq/activemq-openwire-legacy "5.11.1"]
+                 [org.apache.activemq/activemq-stomp "5.11.1"]
+                 [org.fusesource.stompjms/stompjms-client "1.19"]
                  [org.slf4j/slf4j-simple "1.7.10"]
                  [clj-assorted-utils "1.8.0"]
                  [cheshire "5.4.0"]]

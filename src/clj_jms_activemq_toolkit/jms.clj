@@ -21,6 +21,7 @@
            (javax.jms BytesMessage Connection DeliveryMode Message MessageProducer MessageListener ObjectMessage Session TextMessage Topic)
            (org.apache.activemq ActiveMQConnectionFactory ActiveMQSslConnectionFactory)
            (org.apache.activemq.broker BrokerService)
+           (org.fusesource.stomp.jms StompJmsConnectionFactory)
            (org.xerial.snappy Snappy)))
 
 (def ^:dynamic *kryo-output-size* 2048000)
@@ -54,12 +55,15 @@
   (producer (str "reply error " msg)))
 
 (defmacro with-endpoint [server endpoint-description & body]
-  `(let [factory# (if (or (.startsWith ~server "ssl")
-                          (.startsWith ~server "tls"))
-                    (doto (ActiveMQSslConnectionFactory. ~server)
-                      (.setTrustStore *trust-store-file*) (.setTrustStorePassword *trust-store-password*)
-                      (.setKeyStore *key-store-password*) (.setKeyStorePassword *key-store-password*))
-                    (ActiveMQConnectionFactory. ~server))
+  `(let [factory# (cond
+                    (or (.startsWith ~server "ssl")
+                        (.startsWith ~server "tls"))
+                      (doto (ActiveMQSslConnectionFactory. ~server)
+                        (.setTrustStore *trust-store-file*) (.setTrustStorePassword *trust-store-password*)
+                        (.setKeyStore *key-store-password*) (.setKeyStorePassword *key-store-password*))
+                    (.startsWith ~server "stomp")
+                      (doto (StompJmsConnectionFactory.) (.setBrokerURI (.replaceFirst ~server "stomp" "tcp")))
+                    :default (ActiveMQConnectionFactory. ~server))
          ~'connection (doto (.createConnection factory#) (.start))
          ~'session (.createSession ~'connection false Session/AUTO_ACKNOWLEDGE)
          split-endpoint# (filter #(not= % "") (split ~endpoint-description #"/"))
