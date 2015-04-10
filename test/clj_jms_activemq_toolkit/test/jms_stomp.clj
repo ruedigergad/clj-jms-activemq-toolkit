@@ -14,7 +14,7 @@
         clj-assorted-utils.util
         clj-jms-activemq-toolkit.jms))
 
-(def local-jms-server "stomp://localhost:42424")
+(def local-jms-server "stomp://127.0.0.1:42424")
 (def test-topic "/topic/testtopic.foo")
 
 (defn jms-broker-fixture [f]
