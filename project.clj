@@ -11,7 +11,7 @@
                  [org.apache.activemq/activemq-stomp "5.11.1"]
                  [org.fusesource.stompjms/stompjms-client "1.19"]
                  [org.slf4j/slf4j-simple "1.7.10"]
-                 [clj-assorted-utils "1.8.0"]
+                 [clj-assorted-utils "1.9.1"]
                  [cheshire "5.4.0"]]
   :jvm-opts ["-Djava.net.preferIPv4Stack=true" "-Djavax.net.ssl.keyStore=test/ssl/broker.ks" "-Djavax.net.ssl.keyStorePassword=password"]
   :license {:name "Eclipse Public License (EPL) - v 1.0"
