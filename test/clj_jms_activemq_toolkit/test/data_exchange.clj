@@ -44,12 +44,12 @@
     (is (= "foo" @data))))
 
 (deftest test-start-stop-embedded-broker
-  (let [controller (ActiveMqDataExchangeController. "tcp://localhost:42425")]
+  (let [controller (ActiveMqDataExchangeController. "tcp://localhost:52525")]
     (.startEmbeddedBroker controller)
     (.stopEmbeddedBroker controller)))
 
 (deftest test-start-stop-embedded-broker-with-data-exchange
-  (let [controller (ActiveMqDataExchangeController. "tcp://localhost:42425")
+  (let [controller (ActiveMqDataExchangeController. "tcp://localhost:52525")
         _ (.startEmbeddedBroker controller)
         producer (.createProducer controller test-topic)
         flag (prepare-flag)
