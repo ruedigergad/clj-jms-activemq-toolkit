@@ -1,4 +1,3 @@
-
 ;;;
 ;;;   Copyright 2014, University of Applied Sciences Frankfurt am Main
 ;;;
@@ -13,22 +12,10 @@
   clj-jms-activemq-toolkit.test.data-exchange
   (:use clojure.test
         clj-assorted-utils.util
-        clj-jms-activemq-toolkit.jms)
+        clj-jms-activemq-toolkit.jms
+        clj-jms-activemq-toolkit.test.jms-test-base)
   (:import (clj_data_exchange Consumer DataExchangeController Producer)
            (clj_jms_activemq_data_exchange ActiveMqDataExchangeController ActiveMqProducer)))
-
-(def ^:dynamic *local-jms-server* "tcp://127.0.0.1:42424")
-(def test-topic "/topic/testtopic.foo")
-
-(defn run-test [t]
-  (let [broker (start-broker *local-jms-server*)]
-    (t)
-    (.stop broker)))
-
-(defn single-test-fixture [t]
-  (run-test t)
-  (binding [*local-jms-server* "stomp://127.0.0.1:42423"]
-    (run-test t)))
 
 (use-fixtures :each single-test-fixture)
 

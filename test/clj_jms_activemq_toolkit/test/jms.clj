@@ -12,20 +12,8 @@
   clj-jms-activemq-toolkit.test.jms
   (:use clojure.test
         clj-assorted-utils.util
-        clj-jms-activemq-toolkit.jms))
-
-(def ^:dynamic *local-jms-server* "tcp://127.0.0.1:42424")
-(def test-topic "/topic/testtopic.foo")
-
-(defn run-test [t]
-  (let [broker (start-broker *local-jms-server*)]
-    (t)
-    (.stop broker)))
-
-(defn single-test-fixture [t]
-  (run-test t)
-  (binding [*local-jms-server* "stomp://127.0.0.1:42423"]
-    (run-test t)))
+        clj-jms-activemq-toolkit.jms
+        clj-jms-activemq-toolkit.test.jms-test-base))
 
 (use-fixtures :each single-test-fixture)
 
