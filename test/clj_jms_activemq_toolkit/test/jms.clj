@@ -14,28 +14,33 @@
         clj-assorted-utils.util
         clj-jms-activemq-toolkit.jms))
 
-(def local-jms-server "tcp://127.0.0.1:42424")
+(def ^:dynamic *local-jms-server* "tcp://127.0.0.1:42424")
 (def test-topic "/topic/testtopic.foo")
 
-(defn jms-broker-fixture [f]
-  (let [broker (start-broker local-jms-server)]
-    (f)
+(defn run-test [t]
+  (let [broker (start-broker *local-jms-server*)]
+    (t)
     (.stop broker)))
 
-(use-fixtures :each jms-broker-fixture)
+(defn single-test-fixture [t]
+  (run-test t)
+  (binding [*local-jms-server* "stomp://127.0.0.1:42423"]
+    (run-test t)))
+
+(use-fixtures :each single-test-fixture)
 
 (deftest test-fixture
   (is true))
 
 (deftest test-create-topic
-  (let [topic (create-producer local-jms-server test-topic)]
+  (let [topic (create-producer *local-jms-server* test-topic)]
     (is (not (nil? topic)))))
 
 (deftest producer-consumer
-  (let [producer (create-producer local-jms-server test-topic)
+  (let [producer (create-producer *local-jms-server* test-topic)
         was-run (prepare-flag)
         consume-fn (fn [_] (set-flag was-run))
-        consumer (create-consumer local-jms-server test-topic consume-fn)]
+        consumer (create-consumer *local-jms-server* test-topic consume-fn)]
     (is (not (nil? producer)))
     (is (not (nil? consumer)))
     (producer "¡Hola!")
@@ -45,11 +50,11 @@
     (close consumer)))
 
 (deftest send-list
-  (let [producer (create-producer local-jms-server test-topic)
+  (let [producer (create-producer *local-jms-server* test-topic)
         received (ref '())    
         flag (prepare-flag)
         consume-fn (fn [obj] (dosync (ref-set received obj)) (set-flag flag))
-        consumer (create-consumer local-jms-server test-topic consume-fn)
+        consumer (create-consumer *local-jms-server* test-topic consume-fn)
         data '(:a :b :c)]
     (is (not= data @received))
     (producer data)
