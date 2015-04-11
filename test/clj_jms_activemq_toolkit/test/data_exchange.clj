@@ -35,8 +35,8 @@
         data (ref nil)
         consumer (proxy [Consumer] []
                    (processObject [obj]
-                     (set-flag flag)
-                     (dosync (ref-set data obj))))
+                     (dosync (ref-set data obj))
+                     (set-flag flag)))
         _ (.connectConsumer controller test-topic ^Consumer consumer)]
     (.sendObject producer "foo")
     (await-flag flag)
@@ -56,8 +56,8 @@
         data (ref nil)
         consumer (proxy [Consumer] []
                    (processObject [obj]
-                     (set-flag flag)
-                     (dosync (ref-set data obj))))
+                     (dosync (ref-set data obj))
+                     (set-flag flag)))
         _ (.connectConsumer controller test-topic ^Consumer consumer)]
     (.sendObject producer "foo")
     (await-flag flag)
