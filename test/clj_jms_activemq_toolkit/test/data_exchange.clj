@@ -17,27 +17,32 @@
   (:import (clj_data_exchange Consumer DataExchangeController Producer)
            (clj_jms_activemq_data_exchange ActiveMqDataExchangeController ActiveMqProducer)))
 
-(def local-jms-server "tcp://localhost:42424")
+(def ^:dynamic *local-jms-server* "tcp://127.0.0.1:42424")
 (def test-topic "/topic/testtopic.foo")
 
-(defn jms-broker-fixture [f]
-  (let [broker (start-broker local-jms-server)]
-    (f)
+(defn run-test [t]
+  (let [broker (start-broker *local-jms-server*)]
+    (t)
     (.stop broker)))
 
-(use-fixtures :each jms-broker-fixture)
+(defn single-test-fixture [t]
+  (run-test t)
+  (binding [*local-jms-server* "stomp://127.0.0.1:42423"]
+    (run-test t)))
+
+(use-fixtures :each single-test-fixture)
 
 (deftest test-create-activemq-controller
-  (let [controller (ActiveMqDataExchangeController. local-jms-server)]
+  (let [controller (ActiveMqDataExchangeController. *local-jms-server*)]
     (is (instance? DataExchangeController controller))))
 
 (deftest test-create-activemq-producer
-  (let [controller (ActiveMqDataExchangeController. local-jms-server)
+  (let [controller (ActiveMqDataExchangeController. *local-jms-server*)
         producer (.createProducer controller test-topic)]
     (is (instance? Producer producer))))
 
 (deftest test-create-activemq-producer
-  (let [controller (ActiveMqDataExchangeController. local-jms-server)
+  (let [controller (ActiveMqDataExchangeController. *local-jms-server*)
         producer (.createProducer controller test-topic)
         flag (prepare-flag)
         data (ref nil)
