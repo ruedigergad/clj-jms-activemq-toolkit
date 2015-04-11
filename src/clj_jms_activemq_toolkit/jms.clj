@@ -63,7 +63,7 @@
                         (.startsWith ~server "tls"))
                       (doto (ActiveMQSslConnectionFactory. ~server)
                         (.setTrustStore *trust-store-file*) (.setTrustStorePassword *trust-store-password*)
-                        (.setKeyStore *key-store-password*) (.setKeyStorePassword *key-store-password*))
+                        (.setKeyStore *key-store-file*) (.setKeyStorePassword *key-store-password*))
                     (.startsWith ~server "stomp")
                       (doto (StompJmsConnectionFactory.) (.setBrokerURI (.replaceFirst ~server "stomp" "tcp")))
                     :default (ActiveMQConnectionFactory. ~server))

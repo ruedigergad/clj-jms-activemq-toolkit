@@ -24,6 +24,8 @@
 
 (defn single-test-fixture [t]
   (run-test t)
-  (binding [*local-jms-server* "stomp://127.0.0.1:42423"]
+  (binding [*local-jms-server* "stomp://127.0.0.1:42422"]
+    (run-test t))
+  (binding [*local-jms-server* "ssl://127.0.0.1:42425"]
     (run-test t)))
 
