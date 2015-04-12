@@ -9,56 +9,55 @@
 (ns 
   ^{:author "Ruediger Gad",
     :doc "Tests for data exchange interaction"}  
-  clj-jms-activemq-toolkit.test.data-exchange
+  clj-jms-activemq-toolkit.test.java-interop
   (:use clojure.test
         clj-assorted-utils.util
         clj-jms-activemq-toolkit.jms
         clj-jms-activemq-toolkit.test.jms-test-base)
-  (:import (clj_data_exchange Consumer DataExchangeController Producer)
-           (clj_jms_activemq_data_exchange ActiveMqDataExchangeController ActiveMqProducer)))
+  (:import (clj_jms_activemq_toolkit ActiveMqJmsController JmsConsumer JmsController JmsProducer)))
 
 (use-fixtures :each single-test-fixture)
 
 (deftest test-create-activemq-controller
-  (let [controller (ActiveMqDataExchangeController. *local-jms-server*)]
-    (is (instance? DataExchangeController controller))))
+  (let [controller (ActiveMqJmsController. *local-jms-server*)]
+    (is (instance? JmsController controller))))
 
 (deftest test-create-activemq-producer
-  (let [controller (ActiveMqDataExchangeController. *local-jms-server*)
+  (let [controller (ActiveMqJmsController. *local-jms-server*)
         producer (.createProducer controller test-topic)]
-    (is (instance? Producer producer))))
+    (is (instance? JmsProducer producer))))
 
 (deftest test-create-activemq-producer
-  (let [controller (ActiveMqDataExchangeController. *local-jms-server*)
+  (let [controller (ActiveMqJmsController. *local-jms-server*)
         producer (.createProducer controller test-topic)
         flag (prepare-flag)
         data (ref nil)
-        consumer (proxy [Consumer] []
+        consumer (proxy [JmsConsumer] []
                    (processObject [obj]
                      (dosync (ref-set data obj))
                      (set-flag flag)))
-        _ (.connectConsumer controller test-topic ^Consumer consumer)]
+        _ (.connectConsumer controller test-topic ^JmsConsumer consumer)]
     (.sendObject producer "foo")
     (await-flag flag)
     (is (flag-set? flag))
     (is (= "foo" @data))))
 
 (deftest test-start-stop-embedded-broker
-  (let [controller (ActiveMqDataExchangeController. "tcp://localhost:52525")]
+  (let [controller (ActiveMqJmsController. "tcp://localhost:52525")]
     (.startEmbeddedBroker controller)
     (.stopEmbeddedBroker controller)))
 
 (deftest test-start-stop-embedded-broker-with-data-exchange
-  (let [controller (ActiveMqDataExchangeController. "tcp://localhost:52525")
+  (let [controller (ActiveMqJmsController. "tcp://localhost:52525")
         _ (.startEmbeddedBroker controller)
         producer (.createProducer controller test-topic)
         flag (prepare-flag)
         data (ref nil)
-        consumer (proxy [Consumer] []
+        consumer (proxy [JmsConsumer] []
                    (processObject [obj]
                      (dosync (ref-set data obj))
                      (set-flag flag)))
-        _ (.connectConsumer controller test-topic ^Consumer consumer)]
+        _ (.connectConsumer controller test-topic ^JmsConsumer consumer)]
     (.sendObject producer "foo")
     (await-flag flag)
     (is (flag-set? flag))

@@ -9,18 +9,18 @@
 (ns
   ^{:author "Ruediger Gad",
     :doc "Interfaces for Java interop."} 
-  clj-data-exchange.java-interfaces)
+  clj-jms-activemq-toolkit.java-interfaces)
 
 (gen-interface
-  :name clj_data_exchange.Consumer
+  :name clj_jms_activemq_toolkit.JmsConsumer
   :methods [[processObject [Object] void]])
 
 (gen-interface
-  :name clj_data_exchange.Producer
+  :name clj_jms_activemq_toolkit.JmsProducer
   :methods [[sendObject [Object] void]])
 
 (gen-interface
-  :name clj_data_exchange.DataExchangeController
-  :methods [[connectConsumer [String clj_data_exchange.Consumer] void]
-            [createProducer [String] clj_data_exchange.Producer]])
+  :name clj_jms_activemq_toolkit.JmsController
+  :methods [[connectConsumer [String clj_jms_activemq_toolkit.JmsConsumer] void]
+            [createProducer [String] clj_jms_activemq_toolkit.JmsProducer]])
 

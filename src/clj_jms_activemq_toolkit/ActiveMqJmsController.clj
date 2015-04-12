@@ -8,24 +8,24 @@
 
 (ns
   ^{:author "Ruediger Gad",
-    :doc "Data exchange controller for ActiveMQ."} 
-  clj-jms-activemq-data-exchange.ActiveMqDataExchangeController
+    :doc "JMS controller for ActiveMQ."} 
+  clj-jms-activemq-toolkit.ActiveMqJmsController
   (:gen-class
-   :implements [clj_data_exchange.DataExchangeController]
+   :implements [clj_jms_activemq_toolkit.JmsController]
    :init init
    :constructors {[String] []}
    :methods [[startEmbeddedBroker [] void]
              [stopEmbeddedBroker [] void]]
    :state state)
   (:use clj-jms-activemq-toolkit.jms)
-  (:import (clj_data_exchange Consumer DataExchangeController Producer)))
+  (:import (clj_jms_activemq_toolkit JmsConsumer JmsController JmsProducer)))
 
 (defn -init [jms-url]
   [[] {:jms-url jms-url :broker (ref nil)}])
 
 (defn -createProducer [this topic-identifier]
   (let [producer (create-producer (:jms-url (.state this)) topic-identifier)]
-    (proxy [Producer] []
+    (proxy [JmsProducer] []
       (sendObject [obj]
         (producer obj)))))
 
