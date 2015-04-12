@@ -61,7 +61,9 @@
   `(let [factory# (cond
                     (or (.startsWith ~server "ssl")
                         (.startsWith ~server "tls"))
-                      (doto (ActiveMQSslConnectionFactory. ~server)
+                      (doto (ActiveMQSslConnectionFactory. (if (.contains ~server "?")
+                                                             (.substring ~server 0 (.indexOf ~server "?"))
+                                                             ~server))
                         (.setTrustStore *trust-store-file*) (.setTrustStorePassword *trust-store-password*)
                         (.setKeyStore *key-store-file*) (.setKeyStorePassword *key-store-password*))
                     (.startsWith ~server "stomp")

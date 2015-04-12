@@ -31,5 +31,9 @@
   (binding [*local-jms-server* "ssl://127.0.0.1:42425"
             *trust-store-file* "test/ssl/client.ts"
             *key-store-file* "test/ssl/client.ks"]
+    (run-test t))
+  (binding [*local-jms-server* "ssl://127.0.0.1:42425?needClientAuth=true"
+            *trust-store-file* "test/ssl/client.ts"
+            *key-store-file* "test/ssl/client.ks"]
     (run-test t)))
 
