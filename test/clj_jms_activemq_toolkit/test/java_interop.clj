@@ -8,7 +8,7 @@
 
 (ns 
   ^{:author "Ruediger Gad",
-    :doc "Tests for data exchange interaction"}  
+    :doc "Tests for Java interop"}  
   clj-jms-activemq-toolkit.test.java-interop
   (:use clojure.test
         clj-assorted-utils.util
