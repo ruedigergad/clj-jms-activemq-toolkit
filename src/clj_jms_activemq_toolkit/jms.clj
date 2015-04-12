@@ -11,14 +11,17 @@
     :doc "Functions for JMS interaction"} 
   clj-jms-activemq-toolkit.jms
   (:use [clojure.string :only (join split)]
+        clojure.java.io
         clj-assorted-utils.util)
   (:import (clj_jms_activemq_toolkit PooledBytesMessageProducer)
            (com.esotericsoftware.kryo Kryo)
            (com.esotericsoftware.kryo.io Input Output)
            (com.ning.compress.lzf LZFDecoder LZFEncoder)
+           (java.security KeyStore)
            (java.util ArrayList)
            (java.util.concurrent ArrayBlockingQueue)
            (javax.jms BytesMessage Connection DeliveryMode Message MessageProducer MessageListener ObjectMessage Session TextMessage Topic)
+           (javax.net.ssl KeyManagerFactory SSLContext TrustManagerFactory)
            (org.apache.activemq ActiveMQConnectionFactory ActiveMQSslConnectionFactory)
            (org.apache.activemq.broker BrokerService)
            (org.fusesource.stomp.jms StompJmsConnectionFactory)
@@ -57,17 +60,32 @@
   (println msg)
   (producer (str "reply error " msg)))
 
+(defn get-adjusted-ssl-context []
+  (let [keyManagerFactory (doto (KeyManagerFactory/getInstance "SunX509")
+                            (.init (doto (KeyStore/getInstance "JKS")
+                                     (.load (input-stream *key-store-file*) (char-array *key-store-password*)))
+                                   (char-array *key-store-password*)))
+        trustManagerFactory (doto (TrustManagerFactory/getInstance "SunX509")
+                              (.init (doto (KeyStore/getInstance "JKS")
+                                       (.load (input-stream *trust-store-file*) (char-array *trust-store-password*)))))]
+    (doto (SSLContext/getInstance "TLS")
+      (.init (.getKeyManagers keyManagerFactory) (.getTrustManagers trustManagerFactory) nil))))
+
 (defmacro with-endpoint [server endpoint-description & body]
   `(let [factory# (cond
-                    (or (.startsWith ~server "ssl")
-                        (.startsWith ~server "tls"))
+                    (or (.startsWith ~server "ssl:")
+                        (.startsWith ~server "tls:"))
                       (doto (ActiveMQSslConnectionFactory. (if (.contains ~server "?")
                                                              (.substring ~server 0 (.indexOf ~server "?"))
                                                              ~server))
                         (.setTrustStore *trust-store-file*) (.setTrustStorePassword *trust-store-password*)
                         (.setKeyStore *key-store-file*) (.setKeyStorePassword *key-store-password*))
-                    (.startsWith ~server "stomp")
+                    (.startsWith ~server "stomp:")
                       (doto (StompJmsConnectionFactory.) (.setBrokerURI (.replaceFirst ~server "stomp" "tcp")))
+                    (.startsWith ~server "stomp+ssl:")
+                      (doto (StompJmsConnectionFactory.)
+                        (.setSslContext (get-adjusted-ssl-context))
+                        (.setBrokerURI (.replaceFirst ~server "stomp\\+ssl" "ssl")))
                     :default (ActiveMQConnectionFactory. ~server))
          ~'connection (doto (.createConnection factory#) (.start))
          ~'session (.createSession ~'connection false Session/AUTO_ACKNOWLEDGE)
