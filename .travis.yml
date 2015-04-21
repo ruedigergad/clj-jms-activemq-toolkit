@@ -5,4 +5,5 @@ script:
 after_script:
   - bash -ex test/coveralls.sh
 jdk:
+  - openjdk7
   - oraclejdk7
