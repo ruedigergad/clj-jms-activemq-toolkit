@@ -13,7 +13,7 @@
                  [org.slf4j/slf4j-simple "1.7.10"]
                  [clj-assorted-utils "1.9.1"]
                  [cheshire "5.4.0"]]
-  :jvm-opts ["-Djava.net.preferIPv4Stack=true" "-Djavax.net.ssl.keyStore=test/ssl/broker.ks" "-Djavax.net.ssl.keyStorePassword=password" "-Djavax.net.ssl.trustStore=test/ssl/broker.ts" "-Djavax.net.ssl.trustStorePassword=password"]
+  :jvm-opts ["-Djavax.net.ssl.keyStore=test/ssl/broker.ks" "-Djavax.net.ssl.keyStorePassword=password" "-Djavax.net.ssl.trustStore=test/ssl/broker.ts" "-Djavax.net.ssl.trustStorePassword=password"]
   :license {:name "Eclipse Public License (EPL) - v 1.0"
             :url "http://www.eclipse.org/legal/epl-v10.html"
             :distribution :repo
