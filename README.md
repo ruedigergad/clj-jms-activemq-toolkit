@@ -2,6 +2,8 @@
 
 [![Clojars Project](http://clojars.org/fg-netzwerksicherheit/clj-jms-activemq-toolkit/latest-version.svg)](http://clojars.org/fg-netzwerksicherheit/clj-jms-activemq-toolkit)
 
+[![Build Status](https://travis-ci.org/fg-netzwerksicherheit/clj-jms-activemq-toolkit.svg?branch=master)](https://travis-ci.org/fg-netzwerksicherheit/clj-jms-activemq-toolkit)
+
 ## Usage
 
 ### JMS Broker Runner
