@@ -1,5 +1,7 @@
 # clj-jms-activemq-toolkit
 
+[![Clojars Project](http://clojars.org/fg-netzwerksicherheit/clj-jms-activemq-toolkit/latest-version.svg)](http://clojars.org/fg-netzwerksicherheit/clj-jms-activemq-toolkit)
+
 ## Usage
 
 ### JMS Broker Runner
