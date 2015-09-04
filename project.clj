@@ -7,6 +7,7 @@
                  [com.esotericsoftware.kryo/kryo "2.22"]
                  [org.apache.activemq/activemq-broker "5.11.1"]
                  [org.apache.activemq/activemq-client "5.11.1"]
+                 [org.apache.activemq/activemq-jaas "5.11.0"]
                  [org.apache.activemq/activemq-openwire-legacy "5.11.1"]
                  [org.apache.activemq/activemq-stomp "5.11.1"]
                  [org.fusesource.stompjms/stompjms-client "1.19"]

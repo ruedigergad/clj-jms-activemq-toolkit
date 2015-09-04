@@ -1,5 +1,5 @@
 ;;;
-;;;   Copyright 2014, Frankfurt University of Applied Sciences
+;;;   Copyright 2015, Frankfurt University of Applied Sciences
 ;;;
 ;;;   This software is released under the terms of the Eclipse Public License 
 ;;;   (EPL) 1.0. You can find a copy of the EPL at: 
@@ -24,22 +24,61 @@
            (javax.net.ssl KeyManagerFactory SSLContext TrustManagerFactory)
            (org.apache.activemq ActiveMQConnectionFactory ActiveMQSslConnectionFactory)
            (org.apache.activemq.broker BrokerService)
+           (org.apache.activemq.security AuthenticationUser AuthorizationEntry AuthorizationMap AuthorizationPlugin DefaultAuthorizationMap SimpleAuthenticationPlugin)
            (org.fusesource.stomp.jms StompJmsConnectionFactory)
            (org.xerial.snappy Snappy)))
 
 (def ^:dynamic *kryo-output-size* 2048000)
+
+(def ^:dynamic *user-name* nil)
+(def ^:dynamic *user-password* nil)
 
 (def ^:dynamic *trust-store-file* "client.ts")
 (def ^:dynamic *trust-store-password* "password")
 (def ^:dynamic *key-store-file* "client.ks")
 (def ^:dynamic *key-store-password* "password")
 
-(defn start-broker [address]
-  (doto (BrokerService.)
-    (.addConnector address)
-    (.setPersistent false)
-    (.setUseJmx false)
-    (.start)))
+(defn start-broker
+  ([address]
+   (doto (BrokerService.)
+     (.addConnector address)
+     (.setPersistent false)
+     (.setUseJmx false)
+     (.start)))
+  ([address allow-anon users permissions]
+   (let [user-list (map (fn [u] (AuthenticationUser. (u "name") (u "password") (u "groups"))) users)
+         authentication-plugin (doto (SimpleAuthenticationPlugin. user-list)
+                                (.setAnonymousAccessAllowed allow-anon)
+                                (.setAnonymousUser "anonymous")
+                                (.setAnonymousGroup "anonymous"))
+         authorization-entries (map (fn [perm]
+                                      (println "Setting permission:" perm)
+                                      (let [trgt (perm "target")
+                                            adm (perm "admin")
+                                            rd (perm "read")
+                                            wrt (perm "write")
+                                            auth-entry (AuthorizationEntry.)]
+                                        (if (not (nil? adm))
+                                          (.setAdmin auth-entry adm))
+                                        (if (not (nil? rd))
+                                          (.setRead auth-entry rd))
+                                        (if (not (nil? wrt))
+                                          (.setWrite auth-entry wrt))
+                                        (condp = (perm "type")
+                                          "topic" (.setTopic auth-entry trgt)
+                                          "queue" (.setQueue auth-entry trgt)
+                                          (.setDestination auth-entry trgt))
+                                        auth-entry))
+                                    permissions)
+         authorization-map (doto (DefaultAuthorizationMap.)
+                             (.setAuthorizationEntries authorization-entries))
+         authorization-plugin (AuthorizationPlugin. authorization-map)]
+     (doto (BrokerService.)
+       (.addConnector address)
+       (.setPersistent false)
+       (.setUseJmx false)
+       (.setPlugins (into-array org.apache.activemq.broker.BrokerPlugin [authentication-plugin authorization-plugin]))
+       (.start)))))
 
 (defn get-destinations
   ([broker-service]
@@ -87,7 +126,12 @@
                         (.setSslContext (get-adjusted-ssl-context))
                         (.setBrokerURI (.replaceFirst ~server "stomp\\+ssl" "ssl")))
                     :default (ActiveMQConnectionFactory. ~server))
-         ~'connection (doto (.createConnection factory#) (.start))
+         ~'connection (doto (if (and (not (nil? *user-name*)) (not (nil? *user-password*)))
+                              (do
+                                (println "Creating connection for user:" *user-name*)
+                                (.createConnection factory# *user-name* *user-password*))
+                              (.createConnection factory#))
+                        (.start))
          ~'session (.createSession ~'connection false Session/AUTO_ACKNOWLEDGE)
          split-endpoint# (filter #(not= % "") (split ~endpoint-description #"/"))
          endpoint-type# (first split-endpoint#)
