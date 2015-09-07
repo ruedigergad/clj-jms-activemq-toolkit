@@ -1,4 +1,4 @@
-(defproject fg-netzwerksicherheit/clj-jms-activemq-toolkit "1.99.2"
+(defproject fg-netzwerksicherheit/clj-jms-activemq-toolkit "1.99.3"
   :description "Toolkit for using the ActiveMQ JMS implementation in Clojure."
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/tools.cli "0.2.4"]
@@ -21,6 +21,7 @@
             :comments "This is the same license as used for Clojure."}
   :global-vars {*warn-on-reflection* true}
   :aot :all
+  :javac-options ["-target" "1.6" "-source" "1.6"]
   :java-source-paths ["src-java"]
   :prep-tasks [["compile" "clj-jms-activemq-toolkit.java-interfaces"]
                ["javac" "src-java/clj_jms_activemq_toolkit/PooledBytesMessageProducer.java"]
