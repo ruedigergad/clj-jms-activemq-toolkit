@@ -1,0 +1,25 @@
+
+clj-jms-activemq-toolkit makes use of the following third-party libraries:
+
+
+Clojure (EPL)
+
+org.clojure/tools.cli (EPL)
+
+com.ning/compress-lzf (Apache 2)
+
+org.xerial.snappy/snappy-java (Apache 2)
+
+com.esotericsoftware.kryo/kryo (BSD)
+
+Apache ActiveMQ (Apache 2)
+
+org.fusesource.stompjms/stompjms-client (CDDL 1.0)
+
+org.slf4j/slf4j-simple (MIT)
+
+clj-assorted-utils (EPL)
+
+cheshire (Custom, liberal)
+
+
